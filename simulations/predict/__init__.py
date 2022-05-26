@@ -14,7 +14,9 @@ if __name__ == '__main__':
         'PROCESS_KEY': '{}:process:status:{}',
         'PROCESS_RUN_PROFILE_KEY': '{}:process:run-profile:{}',
         'POSITION_KEY': '<MARKET>:position',
-        'POSITION_HISTORY_LIMIT': 10,
+        'POSITION_HISTORY_LIMIT': 100,
+        'TRADE_KEY': '<MARKET>:trade',
+        'TRADE_HISTORY_LIMIT': 100,
         'INSTRUMENT_EXCHANGES_KEY': '<MARKET>:exchange:instruments',
         'EXCHANGE_RATE_TIMESERIES_KEY': '<MARKET>:time-series:exchange-rate:{}',
         'EXCHANGE_RATE_TIMESERIES_RETENTION': 360000
