@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
     RedisCacheHolder(options)
 
-    process_run_profile = ProcessRunProfile('[--WHICH-MARKET--]', 'automata', RunProfile.HOUR)
+    process_run_profile = ProcessRunProfile('<MARKET>', 'automata', RunProfile.HOUR)
 
     repository = ProcessRunProfileRepository(options)
     repository.store(process_run_profile)

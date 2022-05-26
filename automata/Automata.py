@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from exchange.InstrumentExchangesHolder import InstrumentExchangesHolder
@@ -16,8 +17,9 @@ MARKET = 'MARKET'
 class Automata(ScheduledProcess):
 
     def __init__(self, options):
+        self.log = logging.getLogger('Automata')
         self.options = options
-        # todo: have options check
+        # todo: need options check
         # repositories
         self.position_repository: Optional[PositionRepository] = None
         self.instrument_exchange_repository: Optional[InstrumentExchangeRepository] = None
@@ -25,19 +27,21 @@ class Automata(ScheduledProcess):
         # required dependencies
         self.prediction_resolver: PredictionResolver = Optional[None]
         self.trade_strategizor: TradeStrategizor = Optional[None]
-        # data
+        # pre-load data
         self.instrument_exchanges_holder: InstrumentExchangesHolder = Optional[None]
-        # control init
+        # control initialization
         self.__init_in_sequence()
         super().__init__(options, options[MARKET], 'automata')
 
     def __init_in_sequence(self):
+        self.log.info('initializing in sequence')
         self.init_repositories()
         self.init_prediction_resolver()
         self.init_trade_strategizor()
         self.pre_load_data()
 
     def init_repositories(self):
+        self.log.info('initializing repositories')
         self.position_repository = PositionRepository(self.options)
         self.instrument_exchange_repository = InstrumentExchangeRepository(self.options)
         self.exchange_rate_repository = ExchangeRateRepository(self.options)
@@ -51,9 +55,12 @@ class Automata(ScheduledProcess):
             raise AutomataRequirementMissingException('Trade Strategizor is required! Implement "init_trade_strategizor"')
 
     def pre_load_data(self):
+        self.log.info('pre-loading required data')
         self.instrument_exchanges_holder = self.instrument_exchange_repository.retrieve()
 
     def process_to_run(self):
+        # todo: don't run hook ;) POSITION + TRADE
+
         position = self.position_repository.retrieve()
 
         instant = position.instant
