@@ -5,15 +5,19 @@ from exchangerepo.repository.ExchangeRateRepository import ExchangeRateRepositor
 from exchangerepo.repository.InstrumentExchangeRepository import InstrumentExchangeRepository
 from oracle.resolve.PredictionResolver import PredictionResolver
 from positionrepo.repository.PositionRepository import PositionRepository
+from processmanager.ScheduledProcess import ScheduledProcess
 from tradestrategy.TradeStrategizor import TradeStrategizor
 
 from automata.exception.AutomataRequirementMissingException import AutomataRequirementMissingException
 
+MARKET = 'MARKET'
 
-class Automata:
+
+class Automata(ScheduledProcess):
 
     def __init__(self, options):
         self.options = options
+        # todo: have options check
         # repositories
         self.position_repository: Optional[PositionRepository] = None
         self.instrument_exchange_repository: Optional[InstrumentExchangeRepository] = None
@@ -25,6 +29,7 @@ class Automata:
         self.instrument_exchanges_holder: InstrumentExchangesHolder = Optional[None]
         # control init
         self.__init_in_sequence()
+        super().__init__(options, options[MARKET], 'automata')
 
     def __init_in_sequence(self):
         self.init_repositories()
@@ -48,7 +53,7 @@ class Automata:
     def pre_load_data(self):
         self.instrument_exchanges_holder = self.instrument_exchange_repository.retrieve()
 
-    def run(self):
+    def process_to_run(self):
         position = self.position_repository.retrieve()
 
         instant = position.instant
