@@ -52,10 +52,13 @@ class Automata(ScheduledProcess):
         self.exchange_rate_repository = ExchangeRateRepository(self.options)
 
     def init_prediction_resolver(self):
+        # todo: need to dynamic load module (specified by options)
         if self.prediction_resolver is None:
             raise AutomataRequirementMissingException('Prediction Resolver is required! Implement "init_prediction_resolver"')
 
     def init_trade_strategizor(self):
+        # todo: need to dynamic load module (specified by options)
+        # todo: start here because it will be simple
         if self.trade_strategizor is None:
             raise AutomataRequirementMissingException('Trade Strategizor is required! Implement "init_trade_strategizor"')
 

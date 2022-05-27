@@ -19,7 +19,8 @@ if __name__ == '__main__':
         'TRADE_HISTORY_LIMIT': 100,
         'INSTRUMENT_EXCHANGES_KEY': '<MARKET>:exchange:instruments',
         'EXCHANGE_RATE_TIMESERIES_KEY': '<MARKET>:time-series:exchange-rate:{}',
-        'EXCHANGE_RATE_TIMESERIES_RETENTION': 360000
+        'EXCHANGE_RATE_TIMESERIES_RETENTION': 360000,
+        'VERSION': '0.0.3'
     }
 
     logging.basicConfig(level=logging.DEBUG)
