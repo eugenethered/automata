@@ -1,7 +1,6 @@
 import logging
 from typing import Optional
 
-from core.trade.InstrumentTrade import Status
 from exchange.InstrumentExchangesHolder import InstrumentExchangesHolder
 from exchangerepo.repository.ExchangeRateRepository import ExchangeRateRepository
 from exchangerepo.repository.InstrumentExchangeRepository import InstrumentExchangeRepository
@@ -12,9 +11,6 @@ from traderepo.repository.TradeRepository import TradeRepository
 from tradestrategy.TradeStrategizor import TradeStrategizor
 
 from automata.exception.AutomataRequirementMissingException import AutomataRequirementMissingException
-from automata.loader.OracleModuleLoader import OracleModuleLoader
-
-MARKET = 'MARKET'
 
 
 class Automata(ScheduledProcess):
@@ -35,7 +31,7 @@ class Automata(ScheduledProcess):
         self.instrument_exchanges_holder: InstrumentExchangesHolder = Optional[None]
         # control initialization
         self.__init_in_sequence()
-        super().__init__(options, options[MARKET], 'automata')
+        super().__init__(options, options['MARKET'], 'automata')
 
     def __init_in_sequence(self):
         self.log.info('initializing in sequence')
@@ -53,13 +49,10 @@ class Automata(ScheduledProcess):
         self.exchange_rate_repository = ExchangeRateRepository(self.options)
 
     def init_prediction_resolver(self):
-        oracle_module_loader = OracleModuleLoader(self.options['ORACLES'])
-        oracles = oracle_module_loader.initialize_oracles()
-        self.prediction_resolver = PredictionResolver(oracles)
+        if self.prediction_resolver is None:
+            raise AutomataRequirementMissingException('Prediction Resolver is required! Implement "init_prediction_resolver"')
 
     def init_trade_strategizor(self):
-        # todo: need to dynamic load module (specified by options)
-        # todo: start here because it will be simple
         if self.trade_strategizor is None:
             raise AutomataRequirementMissingException('Trade Strategizor is required! Implement "init_trade_strategizor"')
 
@@ -68,15 +61,7 @@ class Automata(ScheduledProcess):
         self.instrument_exchanges_holder = self.instrument_exchange_repository.retrieve()
 
     def intervene_process(self) -> bool:
-        position = self.position_repository.retrieve()
-        if position is None:
-            self.log.info('intervening process due to no position')
-            return True
-        trade = self.trade_repository.retrieve_trade()
-        if trade is not None and trade.status is not Status.EXECUTED:
-            self.log.info(f'intervening process due to trade:[{trade}]')
-            return True
-        return False
+        raise AutomataRequirementMissingException('Intervene process is required! Implement "intervene_process"')
 
     def process_to_run(self):
         position = self.position_repository.retrieve()
