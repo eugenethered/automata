@@ -12,6 +12,7 @@ from traderepo.repository.TradeRepository import TradeRepository
 from tradestrategy.TradeStrategizor import TradeStrategizor
 
 from automata.exception.AutomataRequirementMissingException import AutomataRequirementMissingException
+from automata.loader.OracleModuleLoader import OracleModuleLoader
 
 MARKET = 'MARKET'
 
@@ -52,9 +53,9 @@ class Automata(ScheduledProcess):
         self.exchange_rate_repository = ExchangeRateRepository(self.options)
 
     def init_prediction_resolver(self):
-        # todo: need to dynamic load module (specified by options)
-        if self.prediction_resolver is None:
-            raise AutomataRequirementMissingException('Prediction Resolver is required! Implement "init_prediction_resolver"')
+        oracle_module_loader = OracleModuleLoader(self.options['ORACLES'])
+        oracles = oracle_module_loader.initialize_oracles()
+        self.prediction_resolver = PredictionResolver(oracles)
 
     def init_trade_strategizor(self):
         # todo: need to dynamic load module (specified by options)

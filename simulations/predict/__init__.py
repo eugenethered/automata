@@ -20,7 +20,8 @@ if __name__ == '__main__':
         'INSTRUMENT_EXCHANGES_KEY': '<MARKET>:exchange:instruments',
         'EXCHANGE_RATE_TIMESERIES_KEY': '<MARKET>:time-series:exchange-rate:{}',
         'EXCHANGE_RATE_TIMESERIES_RETENTION': 360000,
-        'VERSION': '0.0.3'
+        'VERSION': '0.0.3',
+        'ORACLES': '<ORACLES>'
     }
 
     logging.basicConfig(level=logging.DEBUG)
