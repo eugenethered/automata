@@ -64,6 +64,7 @@ class Automata(ScheduledProcess):
         raise AutomataRequirementMissingException('Intervene process is required! Implement "intervene_process"')
 
     def process_to_run(self):
+        # todo: add logging please!!!
         position = self.position_repository.retrieve()
 
         instant = position.instant
